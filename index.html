@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survei Gaya Belajar Interaktif</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Font: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .option-card {
+      transition: all 0.2s ease-in-out;
+    }
+    .option-card:hover {
+      transform: translateY(-2px);
+    }
+    .tab-content {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-6 px-4 flex flex-col items-center justify-center">
+
+  <!-- Main Container -->
+  <main class="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 flex flex-col">
+    
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 md:p-8 text-white text-center">
+      <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Tes Gaya Belajar Interaktif</h1>
+      <p class="text-indigo-100 text-sm md:text-base mt-2">Temukan strategi belajar terbaikmu (Visual, Auditori, atau Kinestetik)</p>
+    </header>
+
+    <!-- Stepper / Progress Bar -->
+    <div id="stepper" class="bg-slate-100 px-6 py-4 border-b border-slate-200">
+      <div class="flex items-center justify-between max-w-md mx-auto text-xs font-semibold text-slate-500">
+        <div id="step-dot-0" class="flex flex-col items-center text-indigo-600">
+          <span class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center mb-1 shadow">1</span>
+          <span>Data Diri</span>
+        </div>
+        <div class="flex-1 h-1 bg-slate-300 mx-2 rounded" id="line-0"></div>
+        <div id="step-dot-1" class="flex flex-col items-center">
+          <span class="w-8 h-8 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center mb-1">2</span>
+          <span>Bagian 1</span>
+        </div>
+        <div class="flex-1 h-1 bg-slate-300 mx-2 rounded" id="line-1"></div>
+        <div id="step-dot-2" class="flex flex-col items-center">
+          <span class="w-8 h-8 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center mb-1">3</span>
+          <span>Bagian 2</span>
+        </div>
+        <div class="flex-1 h-1 bg-slate-300 mx-2 rounded" id="line-2"></div>
+        <div id="step-dot-3" class="flex flex-col items-center">
+          <span class="w-8 h-8 rounded-full bg-slate-300 text-slate-600 flex items-center justify-center mb-1">4</span>
+          <span>Bagian 3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Body -->
+    <div class="p-6 md:p-8 flex-1">
+      
+      <!-- Alert Box -->
+      <div id="errorAlert" class="hidden mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded-r-lg">
+        Mohon isi formulir / jawab semua pertanyaan sebelum melanjutkan.
+      </div>
+
+      <!-- TAB 0: Data Diri -->
+      <section id="tab-0" class="tab-content space-y-5">
+        <h2 class="text-xl font-bold text-slate-800 border-b border-slate-100 pb-3">Informasi Peserta</h2>
+        <div>
+          <label for="userName" class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap</label>
+          <input type="text" id="userName" placeholder="Masukkan nama kamu" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+        </div>
+        <div>
+          <label for="userLevel" class="block text-sm font-semibold text-slate-700 mb-1">Jenjang Sekolah / Tingkat</label>
+          <select id="userLevel" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition bg-white">
+            <option value="" disabled selected>Pilih jenjang sekolah kamu</option>
+            <option value="SD">Sekolah Dasar (SD)</option>
+            <option value="SMP">SMP / Sederajat</option>
+            <option value="SMA/SMK">SMA / SMK / Sederajat</option>
+            <option value="Perguruan Tinggi">Perguruan Tinggi</option>
+            <option value="Umum/Lainnya">Lainnya / Umum</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- TAB 1: Soal 1 - 5 -->
+      <section id="tab-1" class="tab-content hidden space-y-6">
+        <h2 class="text-xl font-bold text-slate-800 border-b border-slate-100 pb-2">Bagian 1: Pemahaman & Catatan (Soal 1–5)</h2>
+        <div id="questions-part-1" class="space-y-6"></div>
+      </section>
+
+      <!-- TAB 2: Soal 6 - 10 -->
+      <section id="tab-2" class="tab-content hidden space-y-6">
+        <h2 class="text-xl font-bold text-slate-800 border-b border-slate-100 pb-2">Bagian 2: Konsentrasi & Aktivitas (Soal 6–10)</h2>
+        <div id="questions-part-2" class="space-y-6"></div>
+      </section>
+
+      <!-- TAB 3: Soal 11 - 15 -->
+      <section id="tab-3" class="tab-content hidden space-y-6">
+        <h2 class="text-xl font-bold text-slate-800 border-b border-slate-100 pb-2">Bagian 3: Komunikasi & Solusi (Soal 11–15)</h2>
+        <div id="questions-part-3" class="space-y-6"></div>
+      </section>
+
+      <!-- TAB 4: Layar Hasil -->
+      <section id="tab-results" class="tab-content hidden space-y-6">
+        <div class="bg-indigo-50/70 rounded-xl p-6 border border-indigo-100 text-center">
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-white px-3 py-1 rounded-full shadow-sm">Hasil Diagnosis</span>
+          <h2 class="text-2xl font-bold text-slate-800 mt-3" id="resultName">Halo!</h2>
+          <p class="text-slate-600 text-sm mt-1">Gaya belajar dominan kamu adalah:</p>
+          <div id="dominantType" class="text-3xl md:text-4xl font-extrabold my-3">Visual</div>
+          
+          <!-- Progress Bars -->
+          <div class="space-y-3 mt-6 text-left max-w-md mx-auto">
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                <span>Visual</span>
+                <span id="visualScore">0%</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-2.5">
+                <div id="visualBar" class="bg-blue-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                <span>Auditori</span>
+                <span id="auditoryScore">0%</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-2.5">
+                <div id="auditoryBar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                <span>Kinestetik</span>
+                <span id="kinestheticScore">0%</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-2.5">
+                <div id="kinestheticBar" class="bg-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description Card -->
+        <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
+          <h3 class="text-base font-bold text-slate-800 mb-2 flex items-center gap-2">💡 Karakteristik Gaya Belajar</h3>
+          <p id="typeDescription" class="text-slate-600 text-sm leading-relaxed"></p>
+        </div>
+
+        <!-- Tips Card -->
+        <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm">
+          <h3 class="text-base font-bold text-slate-800 mb-3 flex items-center gap-2">🎯 Strategi & Tips Belajar Efektif</h3>
+          <ul id="typeTips" class="list-disc list-inside text-slate-600 text-sm space-y-2 leading-relaxed"></ul>
+        </div>
+      </section>
+
+      <!-- Navigation Buttons -->
+      <div id="nav-buttons" class="mt-8 pt-4 border-t border-slate-100 flex justify-between gap-4">
+        <button id="btn-prev" type="button" onclick="changeStep(-1)" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-sm transition hidden">
+          ← Kembali
+        </button>
+        <button id="btn-next" type="button" onclick="changeStep(1)" class="ml-auto px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm shadow-md transition">
+          Lanjut →
+        </button>
+      </div>
+
+      <!-- Reset Button on Results Tab -->
+      <button id="btn-reset" type="button" onclick="resetSurvey()" class="hidden w-full mt-4 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 px-6 rounded-xl transition text-sm">
+        🔄 Ulangi Survei
+      </button>
+
+    </div>
+  </main>
+
+  <script>
+    // 15 Pertanyaan Lengkap
+    const questions = [
+      // Part 1 (1-5)
+      { q: "1. Saat mempelajari materi pelajaran baru, cara apa yang paling membantumu?", options: [ { text: "Melihat grafik, diagram, gambar, atau video penjelasan.", type: "visual" }, { text: "Mendengarkan penjelasan guru atau rekaman penjelasan lisan.", type: "auditori" }, { text: "Melakukan praktik langsung atau simulasi materi.", type: "kinestetik" } ] },
+      { q: "2. Ketika berusaha menghafal materi untuk ujian, kamu biasanya:", options: [ { text: "Membayangkan letak catatan atau tulisan di dalam pikiran.", type: "visual" }, { text: "Membaca catatan dengan suara keras berulang-ulang.", type: "auditori" }, { text: "Menulis ulang catatan sambil berjalan atau menggerakkan tangan.", type: "kinestetik" } ] },
+      { q: "3. Bagaimana tampilan catatan pelajaran ideal menurutmu?", options: [ { text: "Penuh dengan warna stabilo, simbol, dan sketsa garis penunjuk.", type: "visual" }, { text: "Catatan poin penting yang singkat untuk dibaca ulang nyaring.", type: "auditori" }, { text: "Ringkas dan sering dilengkapi dengan lembar latihan soal/praktik.", type: "kinestetik" } ] },
+      { q: "4. Saat guru menjelaskan di depan kelas, kamu cenderung:", options: [ { text: "Fokus memperhatikan slide presentasi dan ekspresi wajah guru.", type: "visual" }, { text: "Mendengarkan setiap kata dan intonasi penjelasan guru.", type: "auditori" }, { text: "Sering mencoret-coret kertas atau memainkan pulpen sambil mendengar.", type: "kinestetik" } ] },
+      { q: "5. Ketika merakit barang atau menggunakan perangkat baru, kamu akan:", options: [ { text: "Membaca dan melihat gambar panduan penggunaan lebih dulu.", type: "visual" }, { text: "Mendengarkan instruksi lisan dari orang lain.", type: "auditori" }, { text: "Langsung mencoba merakitnya secara praktis tanpa baca manual.", type: "kinestetik" } ] },
+      
+      // Part 2 (6-10)
+      { q: "6. Apa hal yang paling mudah mengganggu konsentrasimu saat belajar?", options: [ { text: "Tampilan ruangan atau meja belajar yang acak-acakan.", type: "visual" }, { text: "Suara bising, obrolan orang, atau musik di sekitar.", type: "auditori" }, { text: "Keharusan untuk duduk diam dalam waktu yang terlalu lama.", type: "kinestetik" } ] },
+      { q: "7. Saat waktu senggang atau santai, kamu lebih menikmati:", options: [ { text: "Membaca buku, komik, atau menonton film/video.", type: "visual" }, { text: "Mendengarkan musik, podcast, atau mengobrol dengan teman.", type: "auditori" }, { text: "Olahraga, menari, berkebun, atau membuat kerajinan tangan.", type: "kinestetik" } ] },
+      { q: "8. Bagaimana caramu mengingat rute ke lokasi baru yang pernah dikunjungi?", options: [ { text: "Mengingat patokan bangunan atau warna bangunan di jalan.", type: "visual" }, { text: "Mengingat nama jalan dan arahan kata-kata (seperti 'belok kiri setelah toko').", type: "auditori" }, { text: "Mengingat pengalaman sensasi menyetir/berjalan di jalurnya.", type: "kinestetik" } ] },
+      { q: "9. Ketika mengekspresikan emosi senang, kamu biasanya:", options: [ { text: "Tersenyum lebar dan ekspresi wajah terlihat jelas.", type: "visual" }, { text: "Berteriak kegirangan atau berbicara dengan intonasi cepat.", type: "auditori" }, { text: "Lompat-lompat, bertepuk tangan, atau memeluk orang dekat.", type: "kinestetik" } ] },
+      { q: "10. Dalam tugas kelompok sekolah, kamu paling suka peran:", options: [ { text: "Membuat desain slide presentasi, poster, atau tata letak visual.", type: "visual" }, { text: "Menjadi presenter atau pembicara yang menyampaikan materi.", type: "auditori" }, { text: "Membuat alat peraga fisik, proyek praktik, atau eksperimen.", type: "kinestetik" } ] },
+
+      // Part 3 (11-15)
+      { q: "11. Saat membaca buku cerita atau novel, kamu paling menikmati:", options: [ { text: "Penggambaran rinci tentang suasana tempat dan penampilan tokoh.", type: "visual" }, { text: "Percakapan dan dialog antar tokoh yang hidup.", type: "auditori" }, { text: "Aksi laga, gerakan, dan petualangan yang menegangkan.", type: "kinestetik" } ] },
+      { q: "12. Ketika menjelaskan persoalan rumit ke teman, kamu akan:", options: [ { text: "Mencoret-coret kertas atau menggambar skema penjelasan.", type: "visual" }, { text: "Menjelaskan secara bertahap lewat suara dan analogi lisan.", type: "auditori" }, { text: "Menggunakan gestur tangan dan memeragakan situasi langsung.", type: "kinestetik" } ] },
+      { q: "13. Saat lupa cara mengeja sebuah kata sulit, kamu biasanya:", options: [ { text: "Menuliskan kata tersebut di kertas untuk melihat apakah tampak benar.", type: "visual" }, { text: "Mengucapkan kata tersebut keras-keras untuk mendengar bunyinya.", type: "auditori" }, { text: "Menuliskan kata tersebut di udara dengan jari untuk merasakan gerakannya.", type: "kinestetik" } ] },
+      { q: "14. Pilih jenis hadiah yang paling membuatmu senang:", options: [ { text: "Buku bergambar bagus, barang koleksi estetik, atau kamera.", type: "visual" }, { text: "Headphone berkualitas, tiket konser, atau alat musik.", type: "auditori" }, { text: "Peralatan olahraga, tiket taman bermain, atau kit kerajinan tangan.", type: "kinestetik" } ] },
+      { q: "15. Saat merasa stres atau lelah belajar, cara pemulihan terbaikmu adalah:", options: [ { text: "Melihat pemandangan indah atau kerapian ruang tidur.", type: "visual" }, { text: "Mendengarkan lagu tenang atau curhat ke teman.", type: "auditori" }, { text: "Beralih melakukan aktivitas fisik, peregangan, atau berjalan santai.", type: "kinestetik" } ] }
+    ];
+
+    const styleDetails = {
+      visual: {
+        title: "Visual (Penglihatan)",
+        color: "text-blue-600",
+        description: "Kamu belajar paling efektif melalui indra penglihatan. Kamu mudah menyerap informasi dalam bentuk gambar, diagram, grafik, peta konsep, warna, dan tulisan yang terstruktur rapi.",
+        tips: [
+          "Gunakan stabilo (highlighter) warna-warni untuk menandai kata kunci catatan.",
+          "Buat peta pikiran (mind mapping) atau infografis untuk merangkum pelajaran.",
+          "Gunakan flashcard visual dan tonton video penjelasan berbasis ilustrasi.",
+          "Pastikan ruang belajar rapi dan terang agar tidak mengganggu fokus visualmu."
+        ]
+      },
+      auditori: {
+        title: "Auditori (Pendengaran)",
+        color: "text-emerald-600",
+        description: "Kamu belajar paling efektif melalui indra pendengaran. Kamu sangat peka terhadap nada suara, ucapan, dan diskusi lisan. Materi akan cepat melekat di ingatanmu ketika dijelaskan secara lisan.",
+        tips: [
+          "Baca ringkasan atau catatan dengan suara keras berulang kali.",
+          "Rekam penjelasan materi lalu dengarkan kembali menggunakan earphone.",
+          "Gunakan metode diskusi atau ajarkan kembali materi tersebut kepada teman.",
+          "Manfaatkan lagu atau irama bernada untuk menghafal rumus/istilah."
+        ]
+      },
+      kinestetik: {
+        title: "Kinestetik (Gerakan & Sentuhan)",
+        color: "text-amber-600",
+        description: "Kamu belajar paling efektif melalui pengalaman fisik, praktik langsung, dan gerakan tubuh. Kamu lebih cepat memahami konsep ketika bisa menyentuh, mencoba, atau memperagakannya secara nyata.",
+        tips: [
+          "Belajar sambil melakukan gerakan ringan (misal: berjalan perlahan di kamar).",
+          "Banyak latihan soal, eksperimen, dan buat alat peraga fisik sederhana.",
+          "Terapkan metode Pomodoro (25 menit belajar, 5 menit istirahat fisik).",
+          "Gunakan media peraga nyata untuk membantu memvisualisasikan teori abstrak."
+        ]
+      }
+    };
+
+    let currentStep = 0;
+    const userAnswers = {};
+
+    // Inisialisasi Soal ke dalam 3 Bagian Tab
+    function renderSurvey() {
+      const p1 = document.getElementById('questions-part-1');
+      const p2 = document.getElementById('questions-part-2');
+      const p3 = document.getElementById('questions-part-3');
+
+      p1.innerHTML = ''; p2.innerHTML = ''; p3.innerHTML = '';
+
+      questions.forEach((qObj, index) => {
+        const card = createQuestionCard(qObj, index);
+        if (index < 5) p1.appendChild(card);
+        else if (index < 10) p2.appendChild(card);
+        else p3.appendChild(card);
+      });
+    }
+
+    function createQuestionCard(qObj, index) {
+      const div = document.createElement('div');
+      div.className = "space-y-3";
+
+      const title = document.createElement('h3');
+      title.className = "font-semibold text-slate-800 text-sm md:text-base";
+      title.innerText = qObj.q;
+      div.appendChild(title);
+
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = "space-y-2";
+
+      qObj.options.forEach((opt) => {
+        const label = document.createElement('label');
+        label.className = "option-card flex items-start p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-indigo-50/60 hover:border-indigo-200 transition";
+
+        label.innerHTML = `
+          <input type="radio" name="q${index}" value="${opt.type}" onchange="saveAnswer(${index}, '${opt.type}')" class="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300">
+          <span class="ml-3 text-xs md:text-sm text-slate-700 font-medium leading-relaxed">${opt.text}</span>
+        `;
+        optionsDiv.appendChild(label);
+      });
+
+      div.appendChild(optionsDiv);
+      return div;
+    }
+
+    function saveAnswer(index, value) {
+      userAnswers[index] = value;
+      document.getElementById('errorAlert').classList.add('hidden');
+    }
+
+    // Navigasi Tab / Step
+    function changeStep(direction) {
+      const alertBox = document.getElementById('errorAlert');
+
+      // Validasi Step
+      if (direction === 1) {
+        if (currentStep === 0) {
+          const name = document.getElementById('userName').value.trim();
+          const level = document.getElementById('userLevel').value;
+          if (!name || !level) {
+            alertBox.innerText = "Mohon isi Nama Lengkap dan Jenjang Sekolah terlebih dahulu.";
+            alertBox.classList.remove('hidden');
+            return;
+          }
+        } else if (currentStep >= 1 && currentStep <= 3) {
+          const startIdx = (currentStep - 1) * 5;
+          const endIdx = startIdx + 5;
+          for (let i = startIdx; i < endIdx; i++) {
+            if (!userAnswers[i]) {
+              alertBox.innerText = `Mohon jawab semua pertanyaan pada bagian ini sebelum lanjut.`;
+              alertBox.classList.remove('hidden');
+              return;
+            }
+          }
+        }
+      }
+
+      alertBox.classList.add('hidden');
+      currentStep += direction;
+
+      if (currentStep > 3) {
+        calculateAndShowResults();
+        return;
+      }
+
+      updateTabUI();
+    }
+
+    function updateTabUI() {
+      // Sembunyikan semua tab
+      for (let i = 0; i <= 3; i++) {
+        document.getElementById(`tab-${i}`).classList.add('hidden');
+      }
+      document.getElementById('tab-results').classList.add('hidden');
+
+      // Tampilkan tab aktif
+      document.getElementById(`tab-${currentStep}`).classList.remove('hidden');
+
+      // Update Stepper Dots
+      for (let i = 0; i <= 3; i++) {
+        const dot = document.getElementById(`step-dot-${i}`);
+        const span = dot.querySelector('span');
+        if (i <= currentStep) {
+          dot.className = "flex flex-col items-center text-indigo-600 font-semibold";
+          span.className = "w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center mb-1 shadow";
+        } else {
+          dot.className = "flex flex-col items-center text-slate-400 font-normal";
+          span.className = "w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center mb-1";
+        }
+
+        if (i < 3) {
+          const line = document.getElementById(`line-${i}`);
+          line.className = i < currentStep ? "flex-1 h-1 bg-indigo-600 mx-2 rounded transition-all" : "flex-1 h-1 bg-slate-300 mx-2 rounded transition-all";
+        }
+      }
+
+      // Buttons Visibilitas
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const stepper = document.getElementById('stepper');
+
+      stepper.classList.remove('hidden');
+
+      if (currentStep === 0) {
+        btnPrev.classList.add('hidden');
+      } else {
+        btnPrev.classList.remove('hidden');
+      }
+
+      btnNext.innerText = currentStep === 3 ? "Lihat Hasil 🎉" : "Lanjut →";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Perhitungan & Menampilkan Hasil
+    function calculateAndShowResults() {
+      const scores = { visual: 0, auditori: 0, kinestetik: 0 };
+      Object.values(userAnswers).forEach(val => {
+        if (scores[val] !== undefined) scores[val]++;
+      });
+
+      const total = questions.length; // 15
+      const visualPct = Math.round((scores.visual / total) * 100);
+      const auditoryPct = Math.round((scores.auditori / total) * 100);
+      const kinestheticPct = Math.round((scores.kinestetik / total) * 100);
+
+      let dominant = 'visual';
+      if (scores.auditori > scores.visual && scores.auditori >= scores.kinestetik) {
+        dominant = 'auditori';
+      } else if (scores.kinestetik > scores.visual && scores.kinestetik > scores.auditori) {
+        dominant = 'kinestetik';
+      }
+
+      const name = document.getElementById('userName').value.trim();
+      const level = document.getElementById('userLevel').value;
+
+      document.getElementById('resultName').innerText = `Halo, ${name}! (${level})`;
+      
+      const domElem = document.getElementById('dominantType');
+      domElem.innerText = styleDetails[dominant].title;
+      domElem.className = `text-3xl md:text-4xl font-extrabold my-3 ${styleDetails[dominant].color}`;
+
+      // Set Bars
+      document.getElementById('visualScore').innerText = `${visualPct}% (${scores.visual}/15)`;
+      document.getElementById('visualBar').style.width = `${visualPct}%`;
+
+      document.getElementById('auditoryScore').innerText = `${auditoryPct}% (${scores.auditori}/15)`;
+      document.getElementById('auditoryBar').style.width = `${auditoryPct}%`;
+
+      document.getElementById('kinestheticScore').innerText = `${kinestheticPct}% (${scores.kinestetik}/15)`;
+      document.getElementById('kinestheticBar').style.width = `${kinestheticPct}%`;
+
+      document.getElementById('typeDescription').innerText = styleDetails[dominant].description;
+
+      const tipsList = document.getElementById('typeTips');
+      tipsList.innerHTML = '';
+      styleDetails[dominant].tips.forEach(tip => {
+        const li = document.createElement('li');
+        li.innerText = tip;
+        tipsList.appendChild(li);
+      });
+
+      // Sembunyikan Form & Stepper, Tampilkan Hasil
+      for (let i = 0; i <= 3; i++) {
+        document.getElementById(`tab-${i}`).classList.add('hidden');
+      }
+      document.getElementById('stepper').classList.add('hidden');
+      document.getElementById('nav-buttons').classList.add('hidden');
+      document.getElementById('tab-results').classList.remove('hidden');
+      document.getElementById('btn-reset').classList.remove('hidden');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetSurvey() {
+      currentStep = 0;
+      for (let key in userAnswers) delete userAnswers[key];
+
+      document.getElementById('userName').value = '';
+      document.getElementById('userLevel').value = '';
+
+      renderSurvey();
+
+      document.getElementById('btn-reset').classList.add('hidden');
+      document.getElementById('nav-buttons').classList.remove('hidden');
+      document.getElementById('nav-buttons').classList.add('flex');
+
+      updateTabUI();
+    }
+
+    window.onload = () => {
+      renderSurvey();
+      updateTabUI();
+    };
+  </script>
+</body>
+</html>
